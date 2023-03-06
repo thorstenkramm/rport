@@ -15,7 +15,7 @@ Get-Content new.json > cmd\rport\versioninfo.json
 Write-Output "Version the client with whatever is in versioninfo.json"
 go generate cmd/rport/main.go
 Write-Output "[*] Building rport.exe for windows"
-go build -ldflags "github.com/cloudradar-monitoring/rport/share.BuildVersion=$env:GITHUB_REF_NAME" -o rport.exe ./cmd/rport/...
+go build -ldflags "-s -w -X github.com/cloudradar-monitoring/rport/share.BuildVersion=$($env:GITHUB_REF_NAME)" -o rport.exe ./cmd/rport/...
 Get-ChildItem -File *.exe
 .\rport.exe --version
 
@@ -45,7 +45,7 @@ Write-Output "[*] Signing the generated MSI"
 & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86\signtool.exe' sign /fd SHA256 /f mycert.pfx /p MyPassword rport-client.msi
 
 Write-Output "[*] Uploading MSI to download server"
-$upload = "rport-$(env:GITHUB_REF_NAME)_x86_64.msi"
+$upload = "rport-$($env:GITHUB_REF_NAME)_x86_64.msi"
 Move-Item rport-client.msi $upload
 & curl.exe -V
 & curl.exe -fs https://$env:DOWNLOAD_SERVER/exec/upload.php `
