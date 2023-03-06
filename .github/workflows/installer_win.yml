@@ -1,4 +1,4 @@
-name: Build Installer Client Windows
+name: Build MSI packages for Windows
 on:
   push:
     tags:
@@ -20,7 +20,7 @@ jobs:
             export VER=${GITHUB_REF_NAME}
             jq '.StringFileInfo.FileVersion = "'"$VER"'" | .StringFileInfo.ProductVersion = "'"$VER"'"' cmd/rport/versioninfo.json > new.json
         shell: bash
-      - name: Creates MSI
+      - name: Creates and publish MSI
         env:
           MSI_UPLOAD_TOKEN: ${{ secrets.MSI_UPLOAD_TOKEN }}
           DOWNLOAD_SERVER: ${{ secrets.DOWNLOAD_SERVER }}
