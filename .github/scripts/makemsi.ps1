@@ -3,12 +3,12 @@ Write-Output "-----------------"
 $ErrorActionPreference = 'Stop'
 Get-ChildItem env:
 
-Write-Output "[*] Install goversioninfo"
+Write-Output "[*] Installing goversioninfo"
 #go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 $ENV:PATH="$ENV:PATH;$($env:home)\go\bin"
 
-Write-Output "[*] Install WIX"
+Write-Output "[*] Installing WIX"
 choco install wixtoolset
 
 Write-Output "[*] Building MSI"
@@ -36,4 +36,5 @@ Write-Output "[*] Signing the generated MSI"
 
 Write-Output "[*] Uploading MSI to download server"
 $file = "rport-client.msi"
-& curl.exe -fs https://$($env:DOWNLOAD_SERVER)/exec/upload.php -H "Authentication: $($env:MSI_UPLOAD_TOKEN)" -F file=@$($file) -F dest_dir="rport/unstable/msi"
+& curl.exe -V
+& curl.exe -vfs https://$($env:DOWNLOAD_SERVER)/exec/upload.php -H "Authentication: $($env:MSI_UPLOAD_TOKEN)" -F file=@$($file) -F dest_dir="rport/unstable/msi"
