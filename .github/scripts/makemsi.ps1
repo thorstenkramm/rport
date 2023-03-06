@@ -4,7 +4,9 @@ $ErrorActionPreference = 'Stop'
 Get-ChildItem env:
 
 Write-Output "[*] Install goversioninfo"
-go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
+#go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
+go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
+$ENV:PATH="$ENV:PATH;$($env:home)\go\bin"
 
 Write-Output "[*] Install WIX"
 choco install wixtoolset
