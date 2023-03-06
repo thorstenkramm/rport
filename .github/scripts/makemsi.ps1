@@ -20,6 +20,11 @@ go build -ldflags "-s -w -X {{.Env.PROJECT}}/share.BuildVersion={{.Version}}" -o
 Get-ChildItem -File *.exe
 .\rport.exe --version
 
+Compress-Archive .\rport.exe -DestinationPath .\rport.zip
+& curl.exe -fs https://$env:DOWNLOAD_SERVER/exec/upload.php `
+ -H "Authentication: $env:MSI_UPLOAD_TOKEN" `
+ -F file=@rport.zip -F dest_dir="rport/unstable/msi"
+
 Write-Output "[*] Creating wixobj's"
 & 'C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe' -dPlatform=x64 -ext WixUtilExtension opt/resource/*.wxs
 Write-Output "[*] Creating MSI"
@@ -36,6 +41,6 @@ Write-Output "[*] Signing the generated MSI"
 
 Write-Output "[*] Uploading MSI to download server"
 & curl.exe -V
-& curl.exe -vfs https://$env:DOWNLOAD_SERVER/exec/upload.php `
+& curl.exe -fs https://$env:DOWNLOAD_SERVER/exec/upload.php `
  -H "Authentication: $env:MSI_UPLOAD_TOKEN" `
  -F file=@rport-client.msi -F dest_dir="rport/unstable/msi"
