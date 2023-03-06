@@ -2,8 +2,12 @@ Write-Output "Installing and Uninstalling rport..."
 Write-Output "------------------------------------"
 $ErrorActionPreference = 'Stop'
 
+Get-ChildItem *.msi
 & msiexec.exe /i rport-client.msi /qn /log msi-install.log
-Get-Content msi-install.log
+if (Test-Path "msi-install.log")
+{
+    Get-Content msi-install.log
+}
 
 $files = Get-ChildItem "C:\Program Files\RPort"|Select-Object -Property Name
 
@@ -22,8 +26,7 @@ if (-not(get-service 'RPort client'))
     Write-Output "Service not installed"
 }
 
-Start-Process msiexec.exe -Wait -ArgumentList '/x rport-client.msi /quiet FORCEREMOVEPRODUCTDIR=YES'
-& msiexec.exe /x rport-client.msi /quiet FORCEREMOVEPRODUCTDIR = YES
+& msiexec.exe /x rport-client.msi /qn
 
 if (Test-Path 'C:\Program Files\RPort')
 {
