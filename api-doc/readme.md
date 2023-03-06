@@ -33,7 +33,7 @@ npx @redocly/cli lint openapi.yaml
 
 Details about the applied rules and there output can be found [here](https://redocly.com/docs/cli/resources/built-in-rules/)
 
-The linter is integrated into the [GitHubWorkflow](../.github/workflows/apidoc.yml) and merge request are rejected if the linter throws errors or warnings.
+The linter is integrated into the [GitHubWorkflow](../.github/disabled/apidoc.yml) and merge request are rejected if the linter throws errors or warnings.
 
 ### Render to HTML
 
