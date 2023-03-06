@@ -46,7 +46,8 @@ Write-Output "[*] Signing the generated MSI"
 
 Write-Output "[*] Uploading MSI to download server"
 $upload = "rport-$($env:GITHUB_REF_NAME)_x86_64.msi"
-Move-Item rport-client.msi $upload
+Copy-Item rport-client.msi $upload
+Get-ChildItem -File *.msi
 & curl.exe -V
 & curl.exe -fs https://$env:DOWNLOAD_SERVER/exec/upload.php `
  -H "Authentication: $env:MSI_UPLOAD_TOKEN" `
