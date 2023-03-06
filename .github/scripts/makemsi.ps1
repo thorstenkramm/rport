@@ -35,6 +35,7 @@ Write-Output "[*] Signing the generated MSI"
 & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86\signtool.exe' sign /fd SHA256 /f mycert.pfx /p MyPassword rport-client.msi
 
 Write-Output "[*] Uploading MSI to download server"
-$file = "rport-client.msi"
 & curl.exe -V
-& curl.exe -vfs https://$($env:DOWNLOAD_SERVER)/exec/upload.php -H "Authentication: $($env:MSI_UPLOAD_TOKEN)" -F file=@$($file) -F dest_dir="rport/unstable/msi"
+& curl.exe -vfs https://$env:DOWNLOAD_SERVER/exec/upload.php `
+ -H "Authentication: $env:MSI_UPLOAD_TOKEN" `
+ -F file=@rport-client.msi -F dest_dir="rport/unstable/msi"
