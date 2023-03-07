@@ -10,10 +10,10 @@ else
   echo "⛔ ~/.plus.env not found. Exit"
   false
 fi
-ds rport-plus
+cd rport-plus
 export PLUS_ARTIFACT=rport-plus_${PLUS_LATEST}@${GITHUB_REF_NAME}_Linux_$(uname -m).tar.gz
+echo "🚚Will create ${PLUS_ARTIFACT} release file"
 echo "rport-plus v${PLUS_LATEST}; compiled for rportd ${GITHUB_REF_NAME}; built on $(date)" > version.txt
-echo "Will create ${PLUS_ARTIFACT} now"
 tar czf ${PLUS_ARTIFACT} README.md license.txt version.txt rport-plus.so
 tar tzf ${PLUS_ARTIFACT}
 ls -la ${PLUS_ARTIFACT}
