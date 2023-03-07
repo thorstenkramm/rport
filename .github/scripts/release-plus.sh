@@ -1,4 +1,6 @@
 set -e
+pwd
+ls -la
 #
 # Create a tar package
 #
@@ -8,6 +10,7 @@ else
   echo "⛔ ~/.plus.env not found. Exit"
   false
 fi
+ds rport-plus
 export PLUS_ARTIFACT=rport-plus_${PLUS_LATEST}@${GITHUB_REF_NAME}_Linux_$(uname -m).tar.gz
 echo "rport-plus v${PLUS_LATEST}; compiled for rportd ${GITHUB_REF_NAME}; built on $(date)" > version.txt
 echo "Will create ${PLUS_ARTIFACT} now"
