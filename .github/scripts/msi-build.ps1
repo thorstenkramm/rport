@@ -41,12 +41,14 @@ Get-ChildItem -File *.exe
 
 Write-Output "[*] Creating wixobj's"
 & 'C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe' -dPlatform=x64 -ext WixUtilExtension opt/resource/*.wxs
+Start-Sleep 5
 
 Write-Output "[*] Creating MSI"
 & 'C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe' `
   -loc opt/resource/Product_en-us.wxl `
   -ext WixUtilExtension -ext WixUIExtension -sval `
   -out rport-client.msi LicenseAgreementDlg_HK.wixobj WixUI_HK.wixobj Product.wixobj
+Start-Sleep 5
 Get-ChildItem -File *.msi
 Install-Module MSI -Force
 Get-MSISummaryInfo rport-client.msi
@@ -58,4 +60,5 @@ Export-PfxCertificate -cert $cert -FilePath mycert.pfx -Password $MyPassword
 
 Write-Output "[*] Signing the generated MSI"
 & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86\signtool.exe' sign /fd SHA256 /f mycert.pfx /p MyPassword rport-client.msi
+Start-Sleep 5
 Get-AuthenticodeSignature rport-client.msi|Format-List
