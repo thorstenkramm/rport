@@ -1,4 +1,4 @@
-//go:generate goversioninfo -icon=../../opt/resource/app.ico
+//go:generate
 package main
 
 import (

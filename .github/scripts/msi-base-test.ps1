@@ -3,11 +3,8 @@ Write-Output "------------------------------------"
 $ErrorActionPreference = 'Stop'
 
 Get-ChildItem *.msi
-& msiexec.exe /i rport-client.msi /qn /log msi-install.log
-if (Test-Path "msi-install.log")
-{
-    Get-Content msi-install.log
-}
+& msiexec.exe /i rport-client.msi /qn /quiet /log msi-install.log
+Get-Content msi-install.log
 
 $files = Get-ChildItem "C:\Program Files\RPort"|Select-Object -Property Name
 
@@ -26,7 +23,8 @@ if (-not(get-service 'RPort client'))
     Write-Output "Service not installed"
 }
 
-& msiexec.exe /x rport-client.msi /qn
+& msiexec.exe /x rport-client.msi /qn /quiet /log msi-uninstall.log
+Get-Content msi-uninstall.log
 
 if (Test-Path 'C:\Program Files\RPort')
 {
