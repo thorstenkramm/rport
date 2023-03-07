@@ -11,8 +11,7 @@ $ENV:PATH="$ENV:PATH;$($env:home)\go\bin"
 Write-Output "[*] Installing WIX"
 choco install wixtoolset
 
-Get-Content new.json > cmd\rport\versioninfo.json
-Write-Output "Version the build"
+Write-Output "[*] Versioning the build"
 cd cmd/rport
 goversioninfo.exe -product-version $env:GITHUB_REF_NAME
 cd ../../
