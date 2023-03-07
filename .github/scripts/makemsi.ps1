@@ -13,7 +13,7 @@ choco install wixtoolset
 
 Write-Output "[*] Versioning the build"
 cd cmd/rport
-goversioninfo.exe -product-version $env:GITHUB_REF_NAME
+goversioninfo.exe -product-version $env:GITHUB_REF_NAME -file-version $env:GITHUB_REF_NAME
 cd ../../
 
 Write-Output "[*] Building rport.exe for windows"
