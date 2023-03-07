@@ -13,14 +13,14 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.19
-      - name: Set exe's and MSI version 
-        run: |
-            set -e
-            echo "Updating versioninfo.json with Ver: ${GITHUB_REF_NAME}"
-            export VER=${GITHUB_REF_NAME}
-            jq '.StringFileInfo.FileVersion = "'"$VER"'" | .StringFileInfo.ProductVersion = "'"$VER"'"' cmd/rport/versioninfo.json > new.json
-            jq < new.json
-        shell: bash
+#      - name: Set exe's and MSI version
+#        run: |
+#            set -e
+#            echo "Updating versioninfo.json with Ver: ${GITHUB_REF_NAME}"
+#            export VER=${GITHUB_REF_NAME}
+#            jq '.StringFileInfo.FileVersion = "'"$VER"'" | .StringFileInfo.ProductVersion = "'"$VER"'"' cmd/rport/versioninfo.json > new.json
+#            jq < new.json
+#        shell: bash
       - name: Creates and publish MSI
         env:
           MSI_UPLOAD_TOKEN: ${{ secrets.MSI_UPLOAD_TOKEN }}

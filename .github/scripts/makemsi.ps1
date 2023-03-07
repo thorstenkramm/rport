@@ -4,21 +4,23 @@ $ErrorActionPreference = 'Stop'
 Get-ChildItem env:
 
 Write-Output "[*] Installing goversioninfo"
-#go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 $ENV:PATH="$ENV:PATH;$($env:home)\go\bin"
+# See ./cmd/rpport/versioninfo.json.md
 
 Write-Output "[*] Installing WIX"
 choco install wixtoolset
 
 Get-Content new.json > cmd\rport\versioninfo.json
-Write-Output "Version the client with whatever is in versioninfo.json"
-go generate cmd/rport/main.go
+Write-Output "Version the build"
+cd cmd/rport
+goversioninfo.exe -product-version $env:GITHUB_REF_NAME
+cd ../../
+
 Write-Output "[*] Building rport.exe for windows"
 go build -ldflags "-s -w -X github.com/cloudradar-monitoring/rport/share.BuildVersion=$($env:GITHUB_REF_NAME)" -o rport.exe ./cmd/rport/...
 Get-ChildItem -File *.exe
 .\rport.exe --version
-
 Write-Output "[*] Compressing rport.exe to zip"
 $zip = "rport-$($env:GITHUB_REF_NAME)_x86_64.zip"
 Compress-Archive rport.exe -DestinationPath $zip
@@ -33,7 +35,10 @@ Write-Output "[*] Creating wixobj's"
 & 'C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe' -dPlatform=x64 -ext WixUtilExtension opt/resource/*.wxs
 
 Write-Output "[*] Creating MSI"
-& 'C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe' -loc opt/resource/Product_en-us.wxl -ext WixUtilExtension -ext WixUIExtension -sval -out rport-client.msi LicenseAgreementDlg_HK.wixobj WixUI_HK.wixobj Product.wixobj
+& 'C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe' `
+  -loc opt/resource/Product_en-us.wxl `
+  -ext WixUtilExtension -ext WixUIExtension -sval `
+  -out rport-client.msi LicenseAgreementDlg_HK.wixobj WixUI_HK.wixobj Product.wixobj
 Get-ChildItem -File *.msi
 
 Write-Output "[*] Creating a self signed certificate"
