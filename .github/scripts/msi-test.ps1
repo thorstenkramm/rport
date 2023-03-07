@@ -5,7 +5,7 @@ $ErrorActionPreference = 'Stop'
 Get-ChildItem *.msi
 Start-Process msiexec.exe -Wait -ArgumentList '/i rport-client.msi /qn /quiet /log msi-install.log'
 Get-ChildItem *.log
-#Get-Content msi-install.log
+Get-Content msi-install.log
 
 $files = Get-ChildItem "C:\Program Files\RPort"|Select-Object -Property Name
 
