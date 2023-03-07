@@ -18,5 +18,7 @@ jobs:
           MSI_UPLOAD_TOKEN: ${{ secrets.MSI_UPLOAD_TOKEN }}
           DOWNLOAD_SERVER: ${{ secrets.DOWNLOAD_SERVER }}
         run: .github/scripts/msi-build.ps1
-      - name: Tests install, files and uninstallation
+      - name: Test the MSI by install, and uninstallation
         run: .github/scripts/msi-test.ps1
+      - name: Publish the MSI
+        run: .github/scripts/msi-publish.ps1
