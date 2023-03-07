@@ -12,8 +12,26 @@ Write-Output "[*] Installing WIX"
 choco install wixtoolset
 
 Write-Output "[*] Versioning the build"
-cd cmd/rport
-goversioninfo.exe -product-version $env:GITHUB_REF_NAME -file-version $env:GITHUB_REF_NAME
+# Read the template
+$versionInfo = (Get-Content -Raw opt/resource/versioninfo.json | ConvertFrom-Json)
+# Set values
+$major=[int]($env:GITHUB_REF_NAME.Split(".")[0])
+$minor=[int]($env:GITHUB_REF_NAME.Split(".")[1])
+$patch=[int]($env:GITHUB_REF_NAME.Split(".")[2])
+$versionInfo.FixedFileInfo.FileVersion.Major = $major
+$versionInfo.FixedFileInfo.FileVersion.Minor = $minor
+$versionInfo.FixedFileInfo.FileVersion.Patch = $patch
+$versionInfo.FixedFileInfo.ProductVersion.Major = $major
+$versionInfo.FixedFileInfo.ProductVersion.Minor = $minor
+$versionInfo.FixedFileInfo.ProductVersion.Patch = $patch
+$versionInfo.StringFileInfo.FileVersion = $env:GITHUB_REF_NAME
+$versionInfo.StringFileInfo.ProductVersion = $env:GITHUB_REF_NAME
+Write-Output $versionInfo|convertTo-Json
+# Write the file used for the build process
+$versionInfo|ConvertTo-Json|Out-File -Path cmd/rport/versioninfo.json
+# Convert the versioninfo.json to resource.syso
+cd ./cmd/rport
+goversioninfo.exe
 cd ../../
 
 Write-Output "[*] Building rport.exe for windows"
